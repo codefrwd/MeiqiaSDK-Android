@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
 import android.text.TextUtils;
+import android.text.util.Linkify;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -24,6 +25,8 @@ import com.meiqia.meiqiasdk.util.MQEmotionUtil;
 import com.meiqia.meiqiasdk.util.MQUtils;
 import com.meiqia.meiqiasdk.widget.MQBaseCustomCompositeView;
 import com.meiqia.meiqiasdk.widget.MQImageView;
+
+import java.util.regex.Pattern;
 
 import java.io.File;
 
@@ -151,6 +154,8 @@ public abstract class MQBaseBubbleItem extends MQBaseCustomCompositeView impleme
             case BaseMessage.TYPE_CONTENT_TEXT:
                 if (!TextUtils.isEmpty(baseMessage.getContent())) {
                     contentText.setText(MQEmotionUtil.getEmotionText(getContext(), baseMessage.getContent(), 20));
+                    Pattern pattern = Pattern.compile("(haishang://[^\\s]*)");
+                    Linkify.addLinks(contentText, pattern,"");
                 }
                 break;
             // 图片
