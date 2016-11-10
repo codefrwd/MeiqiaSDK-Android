@@ -128,7 +128,7 @@ public class RichText {
         this.textView = textView;
         textView.setMovementMethod(LinkMovementMethod.getInstance());
         Pattern pattern = Pattern.compile("(haishang://[^\\s]*)");
-        Linkify.addLinks(textView, pattern);
+        Linkify.addLinks(textView, pattern,"");
 
         RichText.this.textView.setText(Html.fromHtml(richTextStr, imageGetter, tagHandler));
         RichText.this.textView.setVisibility(View.VISIBLE);
