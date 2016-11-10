@@ -13,6 +13,7 @@ import android.text.style.ClickableSpan;
 import android.text.style.ImageSpan;
 import android.view.View;
 import android.widget.TextView;
+import android.text.util.Linkify;
 
 import com.meiqia.meiqiasdk.imageloader.MQImage;
 import com.meiqia.meiqiasdk.imageloader.MQImageLoader;
@@ -23,6 +24,8 @@ import java.lang.ref.SoftReference;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Pattern;
+
 
 /**
  * OnePiece
@@ -124,6 +127,9 @@ public class RichText {
     public void into(final TextView textView) {
         this.textView = textView;
         textView.setMovementMethod(LinkMovementMethod.getInstance());
+        Pattern pattern = Pattern.compile("(haishang://[^\\s]*)");
+        Linkify.addLinks(textView, pattern);
+
         RichText.this.textView.setText(Html.fromHtml(richTextStr, imageGetter, tagHandler));
         RichText.this.textView.setVisibility(View.VISIBLE);
         RichText.this.textView.invalidate();
