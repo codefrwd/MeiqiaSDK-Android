@@ -22,7 +22,7 @@
         <TextView
             android:id="@+id/content_text"
             style="@style/MQWrapWrap"
-            android:autoLink="web|email|phone"
+            android:clickable="true"
             android:background="@drawable/mq_bg_msg_left"
             android:maxWidth="260dp"
             android:singleLine="false"

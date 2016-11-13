@@ -5,7 +5,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.TextUtils;
 import android.text.style.ImageSpan;
+import android.text.util.Linkify;
+import android.net.Uri;
 
 import com.meiqia.meiqiasdk.R;
 
@@ -17,6 +20,7 @@ import java.util.regex.Pattern;
 public class MQEmotionUtil {
     public static final String REGEX_EMOJI = ":[\u4e00-\u9fa5\\w]+:";
     public static final String REGEX_GROUP = "(" + REGEX_EMOJI + ")";
+    public static final String REGEX_INTENT = "[a-zA-Z]+://[^\\s]+";
 
     private MQEmotionUtil() {
     }
@@ -113,9 +117,27 @@ public class MQEmotionUtil {
         Integer integer = sEmotionMap.get(imgName);
         return integer == null ? -1 : integer;
     }
+    public static SpannableString highlightLinks(String source) {
+        SpannableString spannableString = new SpannableString(source);
+        Pattern urlDetect = Pattern.compile(REGEX_INTENT);
+        Matcher urlMatcher = urlDetect.matcher(source);
+        String scheme = null;
+
+        while (urlMatcher.find()) {
+            String customSchemedUrl = urlMatcher.group(0);
+            Uri uri = Uri.parse(customSchemedUrl);
+            scheme = uri.getScheme();
+            break;
+        }
+
+        if (!TextUtils.isEmpty(scheme)) {
+            Linkify.addLinks(spannableString, urlDetect, scheme);
+        }
+        return spannableString;
+    }
 
     public static SpannableString getEmotionText(Context context, String source, int emotionSizeDp) {
-        SpannableString spannableString = new SpannableString(source);
+        SpannableString spannableString = highlightLinks(source);
         Pattern pattern = Pattern.compile(REGEX_GROUP);
         Matcher matcher = pattern.matcher(spannableString);
         if (matcher.find()) {

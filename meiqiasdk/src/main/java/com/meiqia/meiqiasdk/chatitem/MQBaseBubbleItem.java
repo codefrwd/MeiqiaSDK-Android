@@ -2,13 +2,16 @@ package com.meiqia.meiqiasdk.chatitem;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.net.Uri;
 
 import com.meiqia.meiqiasdk.R;
 import com.meiqia.meiqiasdk.imageloader.MQImage;
@@ -151,6 +154,20 @@ public abstract class MQBaseBubbleItem extends MQBaseCustomCompositeView impleme
             case BaseMessage.TYPE_CONTENT_TEXT:
                 if (!TextUtils.isEmpty(baseMessage.getContent())) {
                     contentText.setText(MQEmotionUtil.getEmotionText(getContext(), baseMessage.getContent(), 20));
+                    contentText.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String text = ((TextView)v).getText().toString().trim();
+                            Log.e("meiqia", "Clicked on Bubble " + text);
+                            try {
+                               Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(text));
+                               i.setData(Uri.parse(text));
+                               getContext().startActivity(i);
+                            } catch (Exception e) {
+                                Log.e("meiqia", "No Intent Found for " + text);
+                            }
+                        }
+                    });
                 }
                 break;
             // 图片
